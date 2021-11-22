@@ -1,46 +1,85 @@
-let data = [
-/*     {
-        content: "把冰箱發霉的檸檬拿去丟",
-    }, */
-];
-const inputs = document.querySelector(".input");
-const txts = document.querySelector(".txt");
-const btn_adds = document.querySelector(".btn_add");
-const lists = document.querySelector(".list");
-//console.log(btn_adds);
+const addBtns = document.querySelector(".btn_add");
+const inputVals = document.querySelector("#inputVal");
+const todoLists = document.querySelector("#todoList");
+//console.log(todoLists);
 
-function renderData(){
-    //const lists = document.querySelector(".list");
+let todoData = [];
+
+//監聽新增功能
+addBtns.addEventListener("click", addTodo);
+function addTodo(){
+    
+    let todo = {
+        txt : inputVals.value,
+        id : new Date().getTime(),
+        checked : '',
+    }
+    //console.log(todo.id);
+    if(!todo.txt.trim()){
+        alert("請填入資料再送出!!");
+        return;
+    }else{
+        todoData.unshift(todo); //新增一筆資料會顯示在前面
+        inputVals.value = ""; //將欄位清空
+    }
+    renderData(todoData);
+}
+
+//tab 切換樣式
+const tabs = document.querySelector(".tab");
+tabs.addEventListener("click", changeTab);
+function changeTab(e){
+    //console.log(e.target.dataset.tab);
+    let tabStatus = document.querySelectorAll(".tab li");
+    tabStatus.forEach((item)=>{
+        item.setAttribute("class", "");
+    });
+    e.target.setAttribute("class", "active");
+
+}   
+
+//刪除功能 & 切換checked狀態功能  
+todoLists.addEventListener("click", deleteAndChecked);
+function deleteAndChecked(e){
+    e.preventDefault();
+    let id = todoData.id;
+    //let id = e.target.closest('li').dataset.id;
+    //console.log(e);
+    if(e.target.nodeName == "A" && e.target.getAttribute("class") == "delete"){
+        todoData.splice(id, 1);
+        //todoData = todoData.filter((i) => i.id != id);
+    }else{
+        /* todoData.forEach((item, index)=>{
+            if(item.id == id){
+                if(todoData[index].checked == 'checked'){
+                    todoData[index].checked = '';
+                }else{
+                    todoData[index].checked = 'checked';
+                }
+            }
+        }) */
+
+    }
+    renderData(todoData);
+}
+
+
+
+//渲染資料
+function renderData(todo){
+
     let str = "";
-    data.forEach( (item, index) => {
-        str += `<li>
+    todo.forEach((item) => {
+        str += `<li data-id="${item.id}">
                     <label class="checkbox" for="">
-                    <input type="checkbox" ${item.checked}/>
-                    <span>${item}</span>
+                        <input type="checkbox" ${item.checked}/>
+                        <span>${item.txt}</span>
                     </label>
-                    <a href="#" data-num="${index}" class="delete"></a>
+                    <a href="#" class="delete"></a>
                 </li>`;
     });
-    lists.innerHTML = str;
+    todoLists.innerHTML = str;
+
 }
-//renderData();
 
-//新增事項
-btn_adds.addEventListener("click", (e) =>{
-
-    if(txts.value == ""){
-        alert("請輸入內容再送出!!");
-        return;
-    }
-    let addObj = {};
-    addObj.content = txts.value;
-    data.push(addObj.content);
-    renderData();
-    txts.value = "";
-})
-
-lists.addEventListener("click", (e) =>{
-    
-    
-})
 
