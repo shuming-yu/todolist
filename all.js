@@ -2,7 +2,7 @@ const addBtns = document.querySelector(".btn_add");
 const inputVals = document.querySelector("#inputVal");
 const todoLists = document.querySelector("#todoList");
 //console.log(todoLists);
-
+let toggleTab = "all";
 let todoData = [];
 
 //監聽新增功能
@@ -25,19 +25,6 @@ function addTodo(e){
     renderData();
 }
 
-//tab 切換樣式
-const tabs = document.querySelector(".tab");
-tabs.addEventListener("click", changeTab);
-function changeTab(e){
-    //console.log(e.target.dataset.tab);
-    let tabStatus = document.querySelectorAll(".tab li");
-    tabStatus.forEach((item)=>{
-        item.setAttribute("class", "");
-    });
-    e.target.setAttribute("class", "active");
-
-}   
-
 //刪除功能 & 切換checked狀態功能  
 todoLists.addEventListener("click", deleteAndChecked);
 function deleteAndChecked(e){
@@ -59,16 +46,26 @@ function deleteAndChecked(e){
             }
             //console.log(item, index);
         });
-        
     }
     renderData();
 }
 
-
+//tab 切換樣式
+const tabs = document.querySelector(".tab");
+tabs.addEventListener("click", changeTab);
+function changeTab(e){
+    //console.log(e.target.dataset.tab);
+    let tabStatus = document.querySelectorAll(".tab li");   
+    tabStatus.forEach((item)=>{
+        item.setAttribute("class", ""); 
+    });
+    e.target.setAttribute("class", "active");
+    toggleTab = e.target.dataset.tab;
+    renderData();
+}   
 
 //渲染資料
-function renderData(e){
-    let count = 0;
+function renderData(){
     let str = "";
     todoData.forEach((item) => {
         str += `<li data-id="${item.id}">
@@ -80,7 +77,10 @@ function renderData(e){
                 </li>`;
     });
     todoLists.innerHTML = str;
-
 }
 
+function updateList(){
+    
+
+}
 
