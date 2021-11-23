@@ -3,6 +3,8 @@
 * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+          list-style: none;
+          
 }
 
 html {
@@ -15,9 +17,9 @@ body {
   background: #eee;
   display: -webkit-box;
   display: -ms-flexbox;
-  display: flex;
+
   color: #333;
-  background-image: linear-gradient(174deg, #ffd370 2%, #ffd370 46%, #ffffff 46%, #ffffff 100%, #e8e8e8 100%);
+  background-image: linear-gradient(174deg,#A9C9FF 2%, #FFBBEC 46%, #ffffff 46%, #ffffff 100%, #e8e8e8 100%);
   letter-spacing: 0.07em;
 }
 

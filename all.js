@@ -7,22 +7,22 @@ let todoData = [];
 
 //監聽新增功能
 addBtns.addEventListener("click", addTodo);
-function addTodo(){
-    
+function addTodo(e){
     let todo = {
-        txt : inputVals.value,
-        id : new Date().getTime(),
-        checked : '',
+        txt : inputVals.value,  
+        id : new Date().getTime(),  
+        checked : '',   
     }
     //console.log(todo.id);
-    if(!todo.txt.trim()){
+    if(!todo.txt.trim()){ //檢查如果輸入空格or無輸入 不等於true則跳警告
         alert("請填入資料再送出!!");
         return;
     }else{
+        e.preventDefault();
         todoData.unshift(todo); //新增一筆資料會顯示在前面
         inputVals.value = ""; //將欄位清空
     }
-    renderData(todoData);
+    renderData();
 }
 
 //tab 切換樣式
@@ -41,35 +41,36 @@ function changeTab(e){
 //刪除功能 & 切換checked狀態功能  
 todoLists.addEventListener("click", deleteAndChecked);
 function deleteAndChecked(e){
-    e.preventDefault();
-    let id = todoData.id;
-    //let id = e.target.closest('li').dataset.id;
-    //console.log(e);
-    if(e.target.nodeName == "A" && e.target.getAttribute("class") == "delete"){
-        todoData.splice(id, 1);
-        //todoData = todoData.filter((i) => i.id != id);
+    let id = e.target.closest('li').dataset.id;
+    //console.log(e.target.closest("li").dataset.id);
+    if(e.target.nodeName === "A" && e.target.getAttribute("class") === "delete"){
+        e.preventDefault();
+        //todoData = todoData.filter((item) => item.id != id);
+        let delNum = todoData.findIndex((item)=> item.id == id);
+        todoData.splice(delNum, 1);
     }else{
-        /* todoData.forEach((item, index)=>{
+        todoData.forEach((item, index)=>{
             if(item.id == id){
-                if(todoData[index].checked == 'checked'){
-                    todoData[index].checked = '';
+                if(todoData[index].checked === 'checked'){    
+                    todoData[index].checked = '';   
                 }else{
-                    todoData[index].checked = 'checked';
+                    todoData[index].checked = 'checked';    
                 }
             }
-        }) */
-
+            //console.log(item, index);
+        });
+        
     }
-    renderData(todoData);
+    renderData();
 }
 
 
 
 //渲染資料
-function renderData(todo){
-
+function renderData(e){
+    let count = 0;
     let str = "";
-    todo.forEach((item) => {
+    todoData.forEach((item) => {
         str += `<li data-id="${item.id}">
                     <label class="checkbox" for="">
                         <input type="checkbox" ${item.checked}/>
