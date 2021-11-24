@@ -2,8 +2,8 @@ const addBtns = document.querySelector(".btn_add");
 const inputVals = document.querySelector("#inputVal");
 const todoLists = document.querySelector("#todoList");
 //console.log(todoLists);
-let toggleTab = "all";
-let todoData = [];
+
+let todoData = [];  
 
 //監聽新增功能
 addBtns.addEventListener("click", addTodo);
@@ -22,7 +22,8 @@ function addTodo(e){
         todoData.unshift(todo); //新增一筆資料會顯示在前面
         inputVals.value = ""; //將欄位清空
     }
-    renderData();
+    //renderList();
+    updateList();
 }
 
 //刪除功能 & 切換checked狀態功能  
@@ -35,7 +36,8 @@ function deleteAndChecked(e){
         //todoData = todoData.filter((item) => item.id != id);
         let delNum = todoData.findIndex((item)=> item.id == id);
         todoData.splice(delNum, 1);
-    }else{
+    }
+    else{
         todoData.forEach((item, index)=>{
             if(item.id == id){
                 if(todoData[index].checked === 'checked'){    
@@ -47,9 +49,11 @@ function deleteAndChecked(e){
             //console.log(item, index);
         });
     }
-    renderData();
+    //renderList();
+    updateList();
 }
 
+let toggleTab = "all";  //預設選取 tab 為 all
 //tab 切換樣式
 const tabs = document.querySelector(".tab");
 tabs.addEventListener("click", changeTab);
@@ -60,12 +64,14 @@ function changeTab(e){
         item.setAttribute("class", ""); 
     });
     e.target.setAttribute("class", "active");
-    toggleTab = e.target.dataset.tab;
-    renderData();
+    toggleTab = e.target.dataset.tab;   //紀錄切換 data-tab
+    //console.log(toggleTab);
+    //renderList();
+    updateList();
 }   
 
 //渲染資料
-function renderData(){
+function renderList(){
     let str = "";
     todoData.forEach((item) => {
         str += `<li data-id="${item.id}">
@@ -79,8 +85,28 @@ function renderData(){
     todoLists.innerHTML = str;
 }
 
-function updateList(){
+function updateList(){  
     
+    let newTodoData = [];
+    
+    if(toggleTab === "all"){    //狀態為 all 顯示全部
+        newTodoData = todoData;
+        //console.log(newTodoData); 
+    }
+    else if(toggleTab === "work"){  //狀態為 work 時篩選出 checked === "" 還沒打勾的
+        newTodoData = todoData.filter((item) => item.checked === "");
+        //console.log(newTodoData); 
+    }
+    else{   //剩餘狀態為 done 時篩選出 checked === "checked" 被打勾的
+        newTodoData = todoData.filter((item) => item.checked === "checked");
+        //console.log(newTodoData); 
+    }
+    
+    const totalNums = document.querySelector("#totalNum");
+    let workNum = todoData.filter((item) => item.checked === "");   //將篩選還沒打勾的項目賦予到 workNum 上
+    totalNums.textContent = workNum.length; //取出 workNum 的長度並輸出
 
+    renderList(newTodoData);
 }
+updateList();
 
