@@ -1,6 +1,7 @@
 const addBtns = document.querySelector(".btn_add");
 const inputVals = document.querySelector("#inputVal");
 const todoLists = document.querySelector("#todoList");
+const inputs = document.querySelector(".input");
 //console.log(todoLists);
 
 let todoData = [];  
@@ -61,9 +62,12 @@ function changeTab(e){
     //console.log(e.target.dataset.tab);
     let tabStatus = document.querySelectorAll(".tab li");   
     tabStatus.forEach((item)=>{
-        item.setAttribute("class", ""); 
+        //item.setAttribute("class", "");
+        item.classList.remove("active"); 
     });
-    e.target.setAttribute("class", "active");
+    //e.target.setAttribute("class", "active");
+    e.target.classList.add("active");
+
     toggleTab = e.target.dataset.tab;   //紀錄切換 data-tab
     //console.log(toggleTab);
     //renderList();
@@ -75,15 +79,16 @@ function renderList(){
     let str = "";
     todoData.forEach((item) => {
         str += `<li data-id="${item.id}">
-                    <label class="checkbox" for="">
-                        <input type="checkbox" ${item.checked}/>
-                        <span>${item.txt}</span>
-                    </label>
-                    <a href="#" class="delete"></a>
-                </li>`;
+        <label class="checkbox" for="">
+        <input type="checkbox" ${item.checked}/>
+        <span>${item.txt}</span>
+        </label>
+        <a href="#" class="delete"></a>
+        </li>`;
     });
     todoLists.innerHTML = str;
 }
+
 
 function updateList(){  
     
@@ -97,7 +102,7 @@ function updateList(){
         newTodoData = todoData.filter((item) => item.checked === "");
         //console.log(newTodoData); 
     }
-    else{   //剩餘狀態為 done 時篩選出 checked === "checked" 被打勾的
+    else if(toggleTab === "done"){   //狀態為 done 時篩選出 checked === "checked" 被打勾的
         newTodoData = todoData.filter((item) => item.checked === "checked");
         //console.log(newTodoData); 
     }
@@ -105,8 +110,24 @@ function updateList(){
     const totalNums = document.querySelector("#totalNum");
     let workNum = todoData.filter((item) => item.checked === "");   //將篩選還沒打勾的項目賦予到 workNum 上
     totalNums.textContent = workNum.length; //取出 workNum 的長度並輸出
-
+    
     renderList(newTodoData);
 }
 updateList();
 
+
+//清除已完成項目
+const cleans = document.querySelector("#clean");
+cleans.addEventListener('click',cleanDone);
+function cleanDone(e) {
+    e.preventDefault();
+    todoData = todoData.filter((item) => item.checked === "");
+    updateList();
+}
+
+//優化 - 按下鍵盤 Enter 執行事件
+inputs.addEventListener("keyup", (e) =>{
+    if(e.key === "Enter"){
+        addTodo(e);
+    }
+})
