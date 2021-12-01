@@ -41,10 +41,10 @@ function deleteAndChecked(e){
     else{
         todoData.forEach((item, index)=>{
             if(item.id == id){
-                if(todoData[index].checked === 'checked'){    
-                    todoData[index].checked = '';   
+                if(todoData[index].checked === 'checked'){    //原本是有被勾選的
+                    todoData[index].checked = '';   //讓它取消勾選
                 }else{
-                    todoData[index].checked = 'checked';    
+                    todoData[index].checked = 'checked';    //讓它缺換為勾選
                 }
             }
             //console.log(item, index);
@@ -67,7 +67,7 @@ function changeTab(e){
     });
     //e.target.setAttribute("class", "active");
     e.target.classList.add("active");
-
+    
     toggleTab = e.target.dataset.tab;   //紀錄切換 data-tab
     //console.log(toggleTab);
     //renderList();
@@ -75,7 +75,7 @@ function changeTab(e){
 }   
 
 //渲染資料
-function renderList(){
+function renderList(todoData){
     let str = "";
     todoData.forEach((item) => {
         str += `<li data-id="${item.id}">
@@ -121,7 +121,7 @@ const cleans = document.querySelector("#clean");
 cleans.addEventListener('click',cleanDone);
 function cleanDone(e) {
     e.preventDefault();
-    todoData = todoData.filter((item) => item.checked === "");
+    todoData = todoData.filter((item) => item.checked === "");  //篩選出沒被打勾的項目
     updateList();
 }
 
